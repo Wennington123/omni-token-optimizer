@@ -138,6 +138,7 @@ omni-token-optimizer/
 ├── SKILL.md                          # Master Skill (Orquestrador Universal)
 ├── AGENTS.md                         # Diretrizes enxutas para arquivos de sistema
 ├── README.md                         # Documentação completa e teórico-empírica
+├── install.sh                        # Instalador de uma linha (curl | bash)
 ├── assets/
 │   ├── chart_token_savings.png       # Gráfico de economia por camada
 │   └── chart_context_growth.png      # Gráfico de curva de crescimento de contexto
@@ -156,14 +157,56 @@ omni-token-optimizer/
 
 ## GUIA DE INSTALAÇÃO E INTEGRAÇÃO
 
-### 1. Claude Code / Command Code
-Copie a pasta `omni-token-optimizer` para a sua pasta local de skills do agente.
+### 1. Instalação em uma linha (Linux/macOS)
 
-### 2. Cursor / VS Code Agent
-Adicione o conteúdo do `AGENTS.md` ao seu arquivo `.cursorrules` ou `system_prompt.md`.
+```bash
+curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/main/install.sh | bash
+```
 
-### 3. Agentes Customizados em Python
-Integre o hook local `hooks/observation_trimmer.py` no manipulador de retornos de ferramentas.
+O script auto-detecta a pasta de skills do seu agente (`~/.commandcode/skills`, `~/.claude/skills` ou `~/.config/opencode/skills`), instala a skill + subskills + hooks, copia os hooks para `~/.commandcode/hooks/` se existir e imprime o snippet de ativação. Opções: `--dir DIR` (raiz de skills alternativa) e `--uninstall`.
+
+Reinicie a sessão do agente e a skill carrega automaticamente.
+
+### 2. Colar no seu agente de IA (Claude Code, Cursor, Command Code, etc.)
+
+Copie o bloco abaixo, cole no seu agente e peça para executar:
+
+```text
+Instale e ative a skill omni-token-optimizer do repo
+https://github.com/Wennington123/omni-token-optimizer
+
+Passos:
+1. Clone o repo (shallow) em um diretório temporário.
+2. Copie SKILL.md, AGENTS.md, subskills/ e hooks/ para a pasta de skills
+   do seu agente, criando o subdiretório omni-token-optimizer/ (ex.:
+   ~/.claude/skills/omni-token-optimizer/ — se ~/.commandcode/skills
+   existir, use-a).
+3. chmod +x em todos os hooks/*.py.
+4. Se ~/.commandcode/hooks existir, copie hooks/*.py para lá também.
+5. Liste os arquivos instalados para confirmar e diga como ativar a
+   skill em uma nova sessão.
+Não modifique nenhum outro arquivo do meu sistema.
+```
+
+### 3. Instalação manual
+
+```bash
+git clone --depth 1 https://github.com/Wennington123/omni-token-optimizer.git
+cp -r omni-token-optimizer ~/.claude/skills/omni-token-optimizer   # ajuste ao seu agente
+chmod +x ~/.claude/skills/omni-token-optimizer/hooks/*.py
+```
+
+### 4. Integração por agente
+
+- **Claude Code / Command Code**: a skill é auto-descoberta na pasta de skills; para os hooks, adicione o snippet `settings.json` impresso pelo `install.sh`.
+- **Cursor / VS Code Agent**: adicione o conteúdo do `AGENTS.md` ao seu `.cursorrules` ou `system_prompt.md`.
+- **Agentes customizados em Python**: integre `hooks/observation_trimmer.py` no manipulador de retornos de ferramentas e `hooks/context_monitor.py` no loop de sessão.
+
+### 5. Desinstalar
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/main/install.sh | bash -s -- --uninstall
+```
 
 ---
 
