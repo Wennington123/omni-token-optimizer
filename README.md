@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo-light.svg" alt="omni-token-optimizer" width="220">
+  </picture>
+</p>
+
 # Omni-Token Optimizer Suite
 
 Suíte universal e de alto desempenho para **otimização rigorosa de tokens de LLM**, desenvolvida para atender tanto a **desenvolvimento de software** quanto a **tarefas de uso geral** (pesquisa, redação, análise de dados e automação de fluxos).
@@ -140,6 +147,8 @@ omni-token-optimizer/
 ├── README.md                         # Documentação completa e teórico-empírica
 ├── install.sh                        # Instalador de uma linha (curl | bash)
 ├── assets/
+│   ├── logo-light.svg                # Logo (tema claro)
+│   ├── logo-dark.svg                 # Logo (tema escuro)
 │   ├── chart_token_savings.png       # Gráfico de economia por camada
 │   └── chart_context_growth.png      # Gráfico de curva de crescimento de contexto
 ├── subskills/
