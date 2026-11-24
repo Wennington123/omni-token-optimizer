@@ -35,7 +35,7 @@ Reinicie a sessão do agente — a skill carrega sozinha. Prefere delegar? Cole 
 3. [Fundamentação Teórica & Referências Bibliográficas](#fundamentação-teórica--referências-bibliográficas)
 4. [Painel Visual & Gráficos de Desempenho](#painel-visual--gráficos-de-desempenho)
 5. [Modelagem Matemática & ROI de Ativação](#modelagem-matemática--roi-de-ativação)
-6. [Matriz Numérica de Economia por Camada](#matriz-numérica-de-economia-por-camada)
+6. [Matriz Numérica de Economia por Camada](#3-exemplo-numérico-em-sessão-típica-15-turnos)
 7. [Estrutura Detalhada dos Arquivos](#estrutura-detalhada-dos-arquivos)
 8. [Guia de Instalação e Integração](#guia-de-instalação-e-integração)
 9. [Licença & Contribuição](#licença--contribuição)
