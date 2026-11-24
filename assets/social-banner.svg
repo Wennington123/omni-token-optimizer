@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <rect width="1280" height="640" fill="#0d1117"/>
+  <rect x="0" y="628" width="1280" height="12" fill="#1a7f37"/>
+  <g transform="translate(80,140) scale(1.35)">
+  <rect x="24" y="76" width="208" height="150" rx="28" fill="none" stroke="#e6edf3" stroke-width="18"/>
+  <path d="M56 115 L86 151 L56 187" fill="none" stroke="#e6edf3" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="122" cy="151" r="17" fill="#3fb950"/>
+  <circle cx="162" cy="151" r="12.5" fill="#3fb950"/>
+  <circle cx="194" cy="151" r="9" fill="#3fb950"/>
+  <g transform="rotate(45 208 56)">
+    <rect x="179" y="27" width="58" height="58" rx="12" fill="#3fb950"/>
+    <circle cx="197" cy="45" r="7.5" fill="none" stroke="#e6edf3" stroke-width="6.5"/>
+    <circle cx="219" cy="67" r="7.5" fill="none" stroke="#e6edf3" stroke-width="6.5"/>
+    <path d="M216 42 L200 70" stroke="#e6edf3" stroke-width="6.5" stroke-linecap="round"/>
+  </g>
+</g>
+  <text x="440" y="290" font-family="DejaVu Sans Mono, monospace" font-size="60" font-weight="bold"><tspan fill="#e6edf3">omni-token</tspan><tspan dx="16" fill="#3fb950">optimizer</tspan></text>
+  <text x="444" y="352" font-family="DejaVu Sans, sans-serif" font-size="24" fill="#8b949e">Hooks de custo 0 + skills que comprimem contexto.</text>
+  <text x="444" y="398" font-family="DejaVu Sans, sans-serif" font-size="20" fill="#6e7681">Caveman · Punisher · Ponytail</text>
+  <text x="444" y="428" font-family="DejaVu Sans, sans-serif" font-size="20" fill="#6e7681">CoACT · TRC · ACON · TRACE · LLMLingua</text>
+</svg>
