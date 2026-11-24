@@ -1,31 +1,15 @@
-# 02 — Lazy Execution
+# Sub-Skill 02: Lazy Execution & Responsibility Tuning (Ponytail + Refactoring)
 
-**Origem:** Ponytail (dev sênior preguiçoso) + Responsibility Tuning (responsabilidade mínima por camada).
-**Gatilho:** escrever código, corrigir bug, adicionar feature, refatorar.
+## 1. Princípios de Execução Enxuta (Ponytail)
+- **YAGNI (You Aren't Gonna Need It)**: Escreva apenas o código necessário para passar o requisito atual.
+- **Reuso de Código Existente**: Antes de escrever uma nova função, verifique se o repositório já possui uma função utilitária equivalente.
+- **Edição em Patch/Diff**: Sempre aplique alterações utilizando blocos diff cirúrgicos ou edições de linha. Proibido reemitir arquivos inteiros acima de 50 linhas.
 
-## Princípio
+## 2. Ajuste de Responsabilidade (Responsibility Tuning)
+Adote a *persona* técnica adequada à solicitação para restringir o espaço de busca de raciocínio (CoT) do modelo:
+- **Software Engineer (SEer)**: Foco em corretude funcional e diffs limpos.
+- **QA Engineer (QAer)**: Foco em testes unitários mínimos cobrindo ramos críticos e tratamentos de erro.
+- **DevOps Engineer**: Foco em comandos de terminal diretos, scripts idempotentes e eficiência de infraestrutura.
 
-A menor mudança que resolve o problema inteiro — nada além. Todo código extra é dívida: escreve, lê, testa, mantém. Código que não existe não tem bug.
-
-## Regras
-
-1. **Escopo do pedido.** Sem feature extra, refatoração de arredores ou "melhoria" não pedida. Corrigir bug não exige limpar função vizinha. Feature simples não precisa de configurabilidade.
-2. **Sem abstração de uso único.** Sem helper, util ou camada para operação que acontece uma vez. Três linhas parecidas no lugar de uma abstração prematura.
-3. **Sem design para requisito hipotético.** "E se um dia precisar de X?" — não implementa X hoje. Flag de feature ou shim de retrocompatibilidade só quando impossível mudar o código direto.
-4. **Sem validação fantasma.** Não valida cenário impossível. Confia em código interno e garantias de framework. Valida só na fronteira: input de usuário, API externa, parse de dados externos.
-5. **Código morto morre.** Sem `_var` não usado, sem re-export de tipo, sem comentário `// removido`. Apaga completo.
-6. **Responsability Tuning por camada:** cada módulo carrega exatamente as responsabilidades do seu papel — nem uma a mais (vira deus-object), nem a menos (vaza para vizinho). Quando um módulo cresce além do papel, extrai; quando encolhe a quase nada, inlina e deleta.
-7. **Sem comentário** a não ser que pedido. Sem docstring em código que você não tocou. Comentário só onde a lógica não se explica.
-8. **Padrão do projeto vence** preferência pessoal: siga convenção existente, formatação e nomenclatura incluídas.
-
-## Teste de aceite (antes de dar a tarefa por pronta)
-
-- Pergunte: "isso resolve o pedido?" — sim.
-- Pergunte: "isso resolve algo que ninguém pediu?" — não.
-- Pergunte: "posso deletar alguma linha e continuar correto?" — se sim, delete.
-
-## Métrica de sucesso
-
-- Diff mínimo: só arquivos e linhas que a tarefa exige.
-- Zero novo nome público (classe/função/config) sem necessidade real.
-- Testes passam sem fixture ou mock extra inventado para o caminho feliz.
+## 3. Refatoração Prévia de Code Smells
+Se o código alvo contiver métodos gigantes (*too long*), expressões booleanas/regex muito complexas ou alta complexidade ciclomática, execute uma breve etapa de refatoração antes do raciocínio de resolução. Isso reduz a quantidade de tokens consumidos por unidade de complexidade de ~0.1015 para ~0.0576 (economia de ~50% no CoT).
