@@ -11,6 +11,7 @@
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-1a7f37?style=flat-square"></a>
   <img alt="Release" src="https://img.shields.io/github/v/release/Wennington123/omni-token-optimizer?style=flat-square&color=1a7f37">
   <img alt="Python" src="https://img.shields.io/badge/python-3.8%2B-1a7f37?style=flat-square&logo=python&logoColor=white">
+  <a href="https://ko-fi.com/wenningtondaquino"><img alt="Ko-fi" src="https://img.shields.io/badge/Ko--fi-Apoie-FF5E5B?style=flat-square&logo=kofi&logoColor=white"></a>
   <a href="#guia-de-instalação-e-integração"><img alt="Install" src="https://img.shields.io/badge/install-curl_%7C_bash-3fb950?style=flat-square&logo=gnu-bash&logoColor=white"></a>
 </p>
 
@@ -250,3 +251,5 @@ curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/
 ## Licença & Contribuição
 
 Este projeto é distribuído sob a licença **MIT**. Sinta-se à vontade para contribuir com novos hooks ou aprimoramentos empíricos via Pull Requests!
+
+Gostou? Pague um café: [ko-fi.com/wenningtondaquino](https://ko-fi.com/wenningtondaquino) ☕
