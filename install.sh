@@ -38,11 +38,16 @@ detect_skills_root() {
 SKILLS_ROOT="${TARGET_DIR:-$(detect_skills_root)}"
 SKILL_DIR="$SKILLS_ROOT/$SKILL_NAME"
 CC_HOOKS="$HOME/.commandcode/hooks"
+OPENCODE_DIR="$HOME/.config/opencode"
 
 if [[ "$UNINSTALL" -eq 1 ]]; then
   rm -rf "$SKILL_DIR"
   if [[ -d "$CC_HOOKS" ]]; then
     for f in $HOOK_FILES; do rm -f "$CC_HOOKS/$f"; done
+  fi
+  if [[ -d "$OPENCODE_DIR/plugins/$SKILL_NAME" ]]; then
+    rm -rf "$OPENCODE_DIR/plugins/$SKILL_NAME"
+    echo "Removido: $OPENCODE_DIR/plugins/$SKILL_NAME"
   fi
   echo "Removido: $SKILL_DIR (e hooks de $CC_HOOKS, se havia)"
   exit 0
@@ -73,6 +78,13 @@ if [[ -d "$CC_HOOKS" ]]; then
   echo "==> Hooks copiados para $CC_HOOKS"
 fi
 
+if [[ -d "$OPENCODE_DIR" ]]; then
+  mkdir -p "$OPENCODE_DIR/plugins"
+  rm -rf "$OPENCODE_DIR/plugins/$SKILL_NAME"
+  cp -r "$TMP/repo/plugins/opencode" "$OPENCODE_DIR/plugins/$SKILL_NAME"
+  echo "==> Plugin OpenCode instalado em $OPENCODE_DIR/plugins/$SKILL_NAME"
+fi
+
 echo "==> Arquivos instalados:"
 find "$SKILL_DIR" -type f | sed "s|^$SKILL_DIR/|    |"
 
@@ -98,4 +110,20 @@ cat <<'WIRE'
     Command Code não substituem o output que o modelo vê (só injetam contexto).
     A skill em si é auto-descoberta pelo agente na próxima sessão.
 WIRE
+
+if [[ -d "$OPENCODE_DIR" ]]; then
+  cat <<WIRE2
+
+==> OpenCode (v2): adicione ao $OPENCODE_DIR/opencode.json —
+
+  {
+    "\$schema": "https://opencode.ai/config.json",
+    "instructions": ["$OPENCODE_DIR/skills/$SKILL_NAME/SKILL.md"],
+    "plugins": ["$OPENCODE_DIR/plugins/$SKILL_NAME"]
+  }
+
+  Skill e plugin são recarregados ao salvar (sem restart). Opções de limiar
+  e trim: veja a seção "Integração OpenCode" no README.
+WIRE2
+fi
 echo "==> Pronto. Reinicie a sessão do agente para carregar a skill."

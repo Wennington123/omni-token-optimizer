@@ -186,9 +186,13 @@ omni-token-optimizer/
 │   ├── 03-observation-trimmer.md     # Regras de corte de observação (CoACT + TRC)
 │   ├── 04-state-compactor.md         # Memória de estado estruturada (ACON + TRACE)
 │   └── 05-prompt-budgeting.md        # Alocação de orçamento de prompt (LLMLingua)
-└── hooks/
-    ├── observation_trimmer.py        # Hook Python local (Zero-Tokens) para truncar logs/APIs
-    └── context_monitor.py            # Hook Python local (Zero-Tokens) para monitorar limite da sessão
+├── hooks/
+│   ├── observation_trimmer.py        # Hook Python local (Zero-Tokens) para truncar logs/APIs
+│   └── context_monitor.py            # Hook Python local (Zero-Tokens) para monitorar limite da sessão
+└── plugins/
+    └── opencode/
+        ├── index.ts                  # Plugin OpenCode v2: liga os hooks via API de plugins
+        └── trim.ts                   # Lógica pura de trim/estimativa de tokens (testável)
 ```
 
 ---
@@ -237,14 +241,89 @@ chmod +x ~/.claude/skills/omni-token-optimizer/hooks/*.py
 ### 4. Integração por agente
 
 - **Claude Code / Command Code**: a skill é auto-descoberta na pasta de skills; para o `context_monitor.py` (que fala o protocolo JSON de hooks e injeta o aviso de compactação da subskill 04), use a config testada impressa pelo `install.sh` — limiar ajustável via `OMNI_TOKEN_THRESHOLD`. O `observation_trimmer.py` **não** tem wiring nesses agentes: hooks de PreToolUse não substituem o output que o modelo vê (só injetam contexto extra), então ligá-lo aumentaria tokens em vez de reduzir — ele existe para o caso abaixo.
+- **OpenCode (v2)**: suporte completo via skill + plugin local — veja [Integração OpenCode](#5-integração-opencode-v2).
 - **Cursor / VS Code Agent**: adicione o conteúdo do `AGENTS.md` ao seu `.cursorrules` ou `system_prompt.md`.
 - **Agentes customizados em Python**: integre `hooks/observation_trimmer.py` no manipulador de retornos de ferramentas (onde o output pode ser substituído antes da API) e `hooks/context_monitor.py` no loop de sessão.
 
-### 5. Desinstalar
+### 5. Integração OpenCode (v2)
+
+Testado no OpenCode **2.4.1**. A integração usa dois mecanismos nativos: a skill auto-descoberta e um plugin de servidor (API v2 de plugins). Diferente do Claude Code/Command Code, no OpenCode o `observation_trimmer` ganha wiring de verdade: o hook `tool.execute.after` substitui o output que o modelo vê, então o corte de logs funciona de fato.
+
+#### Instalação manual
+
+```bash
+git clone --depth 1 https://github.com/Wennington123/omni-token-optimizer.git
+cd omni-token-optimizer
+
+# 1. Skill global (auto-descoberta)
+mkdir -p ~/.config/opencode/skills/omni-token-optimizer
+cp SKILL.md AGENTS.md ~/.config/opencode/skills/omni-token-optimizer/
+cp -r subskills hooks ~/.config/opencode/skills/omni-token-optimizer/
+
+# 2. Plugin (hooks locais)
+mkdir -p ~/.config/opencode/plugins
+cp -r plugins/opencode ~/.config/opencode/plugins/omni-token-optimizer
+```
+
+No `~/.config/opencode/opencode.json` (o OpenCode recarrega skill e plugin ao salvar, sem restart):
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "~/.config/opencode/skills/omni-token-optimizer/SKILL.md"
+  ],
+  "plugins": [
+    "/home/SEU_USUARIO/.config/opencode/plugins/omni-token-optimizer"
+  ]
+}
+```
+
+- `instructions` deixa a Master Skill **sempre ativa** (equivalente ao auto-load). Sem ela, a skill continua disponível sob demanda (mencione `@omni-token-optimizer` no prompt).
+- Sem a chave `plugins`, a skill funciona, mas os hooks locais ficam desligados.
+- O plugin também é carregado de `.opencode/plugins/` (por projeto) se preferir escopo local.
+
+#### O que o plugin faz (custo 0 tokens de LLM)
+
+| Hook | Subskill | Comportamento |
+| --- | --- | --- |
+| `tool.execute.after` | 03 — Observation Trimmer | Trunca saídas longas de `shell` acima de **160 linhas e 6.000 caracteres**: mantém as 40 primeiras linhas, linhas de erro do meio e as 30 últimas, com marcador `[... omni-token-optimizer: N lines / M chars trimmed ...]`. Nunca toca em resultados com anexos (imagens/PDFs). |
+| `session.context` | 04 — State Compactor | Estima o histórico (~4 chars/token) e, acima do limiar, injeta o aviso `[TOKEN_WARNING]` no system prompt — **uma vez**, repetindo só se o contexto crescer ≥25% ou após 2 min. |
+
+#### Opções
+
+Via `options` na entrada do plugin em `opencode.json`, ou variáveis de ambiente (fallback):
+
+```jsonc
+"plugins": [
+  {
+    "package": "/home/SEU_USUARIO/.config/opencode/plugins/omni-token-optimizer",
+    "options": { "contextThreshold": 120000, "debug": true }
+  }
+]
+```
+
+| Opção | Env | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `contextThreshold` | `OMNI_TOKEN_THRESHOLD` | `120000` | Limiar de tokens para o aviso de compactação |
+| `contextRewarnRatio` | — | `1.25` | Reavisa quando o contexto crescer essa fração desde o último aviso |
+| `contextRewarnMs` | — | `120000` | Janela mínima (ms) entre avisos |
+| `trimTools` | `OMNI_TRIM_TOOLS` | `"shell"` | Ferramentas cuja saída pode ser truncada (lista separada por vírgula) |
+| `trimMaxChars` | `OMNI_TRIM_MAX_CHARS` | `6000` | Gatilho de caracteres para o trim |
+| `trimMaxLines` | `OMNI_TRIM_MAX_LINES` | `160` | Gatilho de linhas para o trim |
+| `debug` | `OMNI_DEBUG=1` | `false` | Loga estimativas e trims no stdout do servidor |
+
+#### Verificação
+
+Salve o `opencode.json` e, em uma sessão do agente, rode `seq 1 3000`: acima dos gatilhos, a saída vira head + marcador de trim + tail. Para conferir o monitor de contexto, baixe o limiar (`"contextThreshold": 100`) e veja o aviso `[TOKEN_WARNING]` entrar no system prompt da próxima chamada.
+
+### 6. Desinstalar
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/main/install.sh | bash -s -- --uninstall
 ```
+
+No OpenCode, remova também as entradas `instructions`/`plugins` do `~/.config/opencode/opencode.json` (o script remove a skill e o plugin, mas não edita esse arquivo).
 
 ---
 
