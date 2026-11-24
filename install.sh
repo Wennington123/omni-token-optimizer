@@ -78,17 +78,24 @@ find "$SKILL_DIR" -type f | sed "s|^$SKILL_DIR/|    |"
 
 cat <<'WIRE'
 
-==> Para ativar os hooks no Command Code / Claude Code, adicione ao
-    settings.json (ajuste o caminho do skill dir se usou --dir):
+==> Para ativar o context monitor no Command Code / Claude Code, adicione ao
+    settings.json (config testada; ajuste o limiar via OMNI_TOKEN_THRESHOLD):
 
   "hooks": {
     "PreToolUse": [{
-      "matcher": "Bash",
-      "hooks": [{ "type": "command",
-        "command": "python3 ~/.claude/skills/omni-token-optimizer/hooks/context_monitor.py" }]
+      "matcher": "shell",
+      "hooks": [{
+        "type": "command",
+        "command": "OMNI_TOKEN_THRESHOLD=200000 python3 $HOME/.commandcode/hooks/context_monitor.py",
+        "timeout": 5
+      }]
     }]
   }
 
+    O monitor lê o transcript da sessão (protocolo JSON de hooks) e injeta o
+    aviso de compactação da subskill 04 quando o histórico passa do limite.
+    observation_trimmer.py fica para agentes Python customizados — hooks de
+    Command Code não substituem o output que o modelo vê (só injetam contexto).
     A skill em si é auto-descoberta pelo agente na próxima sessão.
 WIRE
 echo "==> Pronto. Reinicie a sessão do agente para carregar a skill."

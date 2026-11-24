@@ -236,9 +236,9 @@ chmod +x ~/.claude/skills/omni-token-optimizer/hooks/*.py
 
 ### 4. Integração por agente
 
-- **Claude Code / Command Code**: a skill é auto-descoberta na pasta de skills; para os hooks, adicione o snippet `settings.json` impresso pelo `install.sh`.
+- **Claude Code / Command Code**: a skill é auto-descoberta na pasta de skills; para o `context_monitor.py` (que fala o protocolo JSON de hooks e injeta o aviso de compactação da subskill 04), use a config testada impressa pelo `install.sh` — limiar ajustável via `OMNI_TOKEN_THRESHOLD`. O `observation_trimmer.py` **não** tem wiring nesses agentes: hooks de PreToolUse não substituem o output que o modelo vê (só injetam contexto extra), então ligá-lo aumentaria tokens em vez de reduzir — ele existe para o caso abaixo.
 - **Cursor / VS Code Agent**: adicione o conteúdo do `AGENTS.md` ao seu `.cursorrules` ou `system_prompt.md`.
-- **Agentes customizados em Python**: integre `hooks/observation_trimmer.py` no manipulador de retornos de ferramentas e `hooks/context_monitor.py` no loop de sessão.
+- **Agentes customizados em Python**: integre `hooks/observation_trimmer.py` no manipulador de retornos de ferramentas (onde o output pode ser substituído antes da API) e `hooks/context_monitor.py` no loop de sessão.
 
 ### 5. Desinstalar
 
