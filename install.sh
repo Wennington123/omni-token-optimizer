@@ -49,6 +49,10 @@ if [[ "$UNINSTALL" -eq 1 ]]; then
     rm -rf "$OPENCODE_DIR/plugins/$SKILL_NAME"
     echo "Removido: $OPENCODE_DIR/plugins/$SKILL_NAME"
   fi
+  if [[ -d "$OPENCODE_DIR/skills/$SKILL_NAME" ]]; then
+    rm -rf "$OPENCODE_DIR/skills/$SKILL_NAME"
+    echo "Removido: $OPENCODE_DIR/skills/$SKILL_NAME"
+  fi
   echo "Removido: $SKILL_DIR (e hooks de $CC_HOOKS, se havia)"
   exit 0
 fi
@@ -83,6 +87,15 @@ if [[ -d "$OPENCODE_DIR" ]]; then
   rm -rf "$OPENCODE_DIR/plugins/$SKILL_NAME"
   cp -r "$TMP/repo/plugins/opencode" "$OPENCODE_DIR/plugins/$SKILL_NAME"
   echo "==> Plugin OpenCode instalado em $OPENCODE_DIR/plugins/$SKILL_NAME"
+
+  # Em máquinas com mais de um agente, a skill foi para outro root (ex.:
+  # ~/.commandcode/skills); o OpenCode só a enxerga em ~/.config/opencode/skills.
+  OPENCODE_SKILL_DIR="$OPENCODE_DIR/skills/$SKILL_NAME"
+  if [[ "$SKILL_DIR" != "$OPENCODE_SKILL_DIR" ]]; then
+    mkdir -p "$OPENCODE_SKILL_DIR"
+    cp -r "$SKILL_DIR/." "$OPENCODE_SKILL_DIR/"
+    echo "==> Skill OpenCode instalada em $OPENCODE_SKILL_DIR"
+  fi
 fi
 
 echo "==> Arquivos instalados:"

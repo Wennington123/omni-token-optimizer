@@ -205,7 +205,7 @@ omni-token-optimizer/
 curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/main/install.sh | bash
 ```
 
-O script auto-detecta a pasta de skills do seu agente (`~/.commandcode/skills`, `~/.claude/skills` ou `~/.config/opencode/skills`), instala a skill + subskills + hooks, copia os hooks para `~/.commandcode/hooks/` se existir e imprime o snippet de ativação. Opções: `--dir DIR` (raiz de skills alternativa) e `--uninstall`.
+O script auto-detecta a pasta de skills do seu agente (`~/.commandcode/skills`, `~/.claude/skills` ou `~/.config/opencode/skills`), instala a skill + subskills + hooks, copia os hooks para `~/.commandcode/hooks/` se existir e imprime o snippet de ativação. Se `~/.config/opencode/` existir, instala também a skill em `~/.config/opencode/skills/` e o plugin de hooks em `~/.config/opencode/plugins/` — mesmo que a raiz detectada seja outra. Opções: `--dir DIR` (raiz de skills alternativa) e `--uninstall`.
 
 Reinicie a sessão do agente e a skill carrega automaticamente.
 
