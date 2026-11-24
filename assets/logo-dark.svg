@@ -1,8 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img">
   <title>omni-token-optimizer</title>
-  <rect x="20" y="44" width="216" height="168" rx="28" fill="none" stroke="#e6edf3" stroke-width="18"/>
-  <path d="M52 92 L82 128 L52 164" fill="none" stroke="#e6edf3" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="118" cy="128" r="17" fill="#3fb950"/>
-  <circle cx="158" cy="128" r="12.5" fill="#3fb950"/>
-  <circle cx="190" cy="128" r="9" fill="#3fb950"/>
+  <rect x="24" y="76" width="208" height="150" rx="28" fill="none" stroke="#e6edf3" stroke-width="18"/>
+  <path d="M56 115 L86 151 L56 187" fill="none" stroke="#e6edf3" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="122" cy="151" r="17" fill="#3fb950"/>
+  <circle cx="162" cy="151" r="12.5" fill="#3fb950"/>
+  <circle cx="194" cy="151" r="9" fill="#3fb950"/>
+<g transform="rotate(45 208 56)">
+  <rect x="179" y="27" width="58" height="58" rx="12" fill="#3fb950"/>
+  <circle cx="197" cy="45" r="7.5" fill="none" stroke="#e6edf3" stroke-width="6.5"/>
+  <circle cx="219" cy="67" r="7.5" fill="none" stroke="#e6edf3" stroke-width="6.5"/>
+  <path d="M216 42 L200 70" stroke="#e6edf3" stroke-width="6.5" stroke-linecap="round"/>
+</g>
 </svg>
