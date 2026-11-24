@@ -7,13 +7,28 @@
 
 # Omni-Token Optimizer Suite
 
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-1a7f37?style=flat-square"></a>
+  <img alt="Release" src="https://img.shields.io/github/v/release/Wennington123/omni-token-optimizer?style=flat-square&color=1a7f37">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.8%2B-1a7f37?style=flat-square&logo=python&logoColor=white">
+  <a href="#guia-de-instalação-e-integração"><img alt="Install" src="https://img.shields.io/badge/install-curl_%7C_bash-3fb950?style=flat-square&logo=gnu-bash&logoColor=white"></a>
+</p>
+
 Suíte universal e de alto desempenho para **otimização rigorosa de tokens de LLM**, desenvolvida para atender tanto a **desenvolvimento de software** quanto a **tarefas de uso geral** (pesquisa, redação, análise de dados e automação de fluxos).
 
 O repositório unifica a filosofia de 3 projetos de referência (**Caveman**, **Punisher Mode** e **Ponytail**) com as evidências empíricas e algoritmos de **6 artigos científicos de ponta** em compressão de contexto e raciocínio de agentes.
 
+## Quick Start
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/main/install.sh | bash
+```
+
+Reinicie a sessão do agente — a skill carrega sozinha. Prefere delegar? Cole o [bloco de prompt pronto](#2-colar-no-seu-agente-de-ia-claude-code-cursor-command-code-etc) no seu agente.
+
 ---
 
-## SUMÁRIO
+## Sumário
 1. [Visão Geral & Filosofia](#visão-geral--filosofia)
 2. [Arquitetura Geral (Hooks + Skills)](#arquitetura-geral-hooks--skills)
 3. [Fundamentação Teórica & Referências Bibliográficas](#fundamentação-teórica--referências-bibliográficas)
@@ -26,7 +41,7 @@ O repositório unifica a filosofia de 3 projetos de referência (**Caveman**, **
 
 ---
 
-## VISÃO GERAL & FILOSOFIA
+## Visão Geral & Filosofia
 
 À medida que os agentes de IA realizam tarefas de longo horizonte, o **crescimento descontrolado do contexto** eleva os custos de inferência, aumenta a latência e degrada a capacidade de atenção do modelo.
 
@@ -36,7 +51,7 @@ O **Omni-Token Optimizer** atua em duas frentes complementares:
 
 ---
 
-## ARQUITETURA GERAL (HOOKS + SKILLS)
+## Arquitetura Geral (Hooks + Skills)
 
 ```text
 [Solicitação do Usuário / Comando de Ferramenta]
@@ -60,11 +75,22 @@ O **Omni-Token Optimizer** atua em duas frentes complementares:
  └──────────────────────────────────────────────────────────────┘
 ```
 
+| Subskill | Foco | Base |
+|---|---|---|
+| [01 — Terse Communication](subskills/01-terse-communication.md) | Respostas secas, zero cerimônia | Caveman + Punisher |
+| [02 — Lazy Execution](subskills/02-lazy-execution.md) | Menor diff que resolve, YAGNI | Ponytail |
+| [03 — Observation Trimmer](subskills/03-observation-trimmer.md) | Corte de logs e outputs de API | CoACT + TRC |
+| [04 — State Compactor](subskills/04-state-compactor.md) | Memória de estado estruturada | ACON + TRACE |
+| [05 — Prompt Budgeting](subskills/05-prompt-budgeting.md) | Orçamento do contexto inicial | LLMLingua |
+
 ---
 
-## FUNDAMENTAÇÃO TEÓRICA & REFERÊNCIAS BIBLIOGRÁFICAS
+## Fundamentação Teórica & Referências Bibliográficas
 
 O repositório é construído rigorosamente sobre 9 fontes de conhecimento:
+
+<details>
+<summary><b>3 repositórios + 6 artigos científicos — clique para expandir</b></summary>
 
 ### Repositórios Open-Source
 
@@ -99,9 +125,11 @@ O repositório é construído rigorosamente sobre 9 fontes de conhecimento:
    - **Citação**: *LLMLingua: Compressing Prompts for Accelerated Inference via Small Language Models.* (arXiv:2023.emnlp-main.825)
    - **Contribuição**: Alocação orçamentária por entropia. Preserva 100% da instrução central e reduz demonstrações *few-shot* redundantes em até **5x**.
 
+</details>
+
 ---
 
-## PAINEL VISUAL & GRÁFICOS DE DESEMPENHO
+## Painel Visual & Gráficos de Desempenho
 
 ### Gráfico 1: Economia Percentual de Tokens por Camada de Otimização
 ![Redução Percentual de Tokens](assets/chart_token_savings.png)
@@ -111,7 +139,7 @@ O repositório é construído rigorosamente sobre 9 fontes de conhecimento:
 
 ---
 
-## MODELAGEM MATEMÁTICA & ROI DE ATIVAÇÃO
+## Modelagem Matemática & ROI de Ativação
 
 ### 1. Custo de Ativação Ajustado por Prompt Caching
 Quando a Master Skill e suas Sub-Skills são carregadas no prompt do sistema ($N_{skill} \approx 1.200 \text{ tokens}$), o custo acumulado em uma sessão de $T$ turnos com desconto de *Prompt Caching* ($d_{cache} \approx 0.90$) é:
@@ -138,7 +166,7 @@ $$\Delta \text{Tokens}_{líquida} = \Delta \text{Output} + \Delta \text{Obs} + \
 
 ---
 
-## ESTRUTURA DETALHADA DOS ARQUIVOS
+## Estrutura Detalhada dos Arquivos
 
 ```text
 omni-token-optimizer/
@@ -164,7 +192,7 @@ omni-token-optimizer/
 
 ---
 
-## GUIA DE INSTALAÇÃO E INTEGRAÇÃO
+## Guia de Instalação e Integração
 
 ### 1. Instalação em uma linha (Linux/macOS)
 
@@ -219,6 +247,6 @@ curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/
 
 ---
 
-## LICENÇA & CONTRIBUIÇÃO
+## Licença & Contribuição
 
 Este projeto é distribuído sob a licença **MIT**. Sinta-se à vontade para contribuir com novos hooks ou aprimoramentos empíricos via Pull Requests!
