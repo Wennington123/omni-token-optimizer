@@ -10,7 +10,6 @@ import sys
 TOKEN_THRESHOLD = 8000
 
 def estimate_tokens(text: str) -> int:
-    # Estimativa heurística leve (~4 caracteres por token)
     return len(text) // 4
 
 def main():
