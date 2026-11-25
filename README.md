@@ -27,6 +27,10 @@ curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/
 
 Reinicie a sessão do agente — a skill carrega sozinha. Prefere delegar? Cole o [bloco de prompt pronto](#2-colar-no-seu-agente-de-ia-claude-code-cursor-command-code-etc) no seu agente.
 
+![Demonstração no OpenCode](assets/demo-opencode.gif)
+
+*Tela real do OpenCode: instalação em uma linha, `seq 1 3000` passando pelo filtro local e o contexto final.*
+
 ---
 
 ## Sumário
@@ -54,6 +58,11 @@ O **Omni-Token Optimizer** atua em duas frentes complementares:
 
 ## Arquitetura Geral (Hooks + Skills)
 
+![Como funciona](assets/arch-flow.gif)
+
+<details>
+<summary><b>Diagrama em texto (para leitores de tela e cópia)</b></summary>
+
 ```text
 [Solicitação do Usuário / Comando de Ferramenta]
                       │
@@ -75,6 +84,8 @@ O **Omni-Token Optimizer** atua em duas frentes complementares:
  │  • subskills/05-prompt-budgeting.md (LLMLingua Allocation)   │
  └──────────────────────────────────────────────────────────────┘
 ```
+
+</details>
 
 | Subskill | Foco | Base |
 |---|---|---|
@@ -178,6 +189,8 @@ omni-token-optimizer/
 ├── assets/
 │   ├── logo-light.svg                # Logo (tema claro)
 │   ├── logo-dark.svg                 # Logo (tema escuro)
+│   ├── arch-flow.gif                 # Diagrama animado da arquitetura
+│   ├── demo-opencode.gif             # Demo real: instalação + trim no OpenCode
 │   ├── chart_token_savings.png       # Gráfico de economia por camada
 │   └── chart_context_growth.png      # Gráfico de curva de crescimento de contexto
 ├── subskills/
