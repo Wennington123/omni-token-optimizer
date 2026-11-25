@@ -317,6 +317,12 @@ Via `options` na entrada do plugin em `opencode.json`, ou variáveis de ambiente
 
 Salve o `opencode.json` e, em uma sessão do agente, rode `seq 1 3000`: acima dos gatilhos, a saída vira head + marcador de trim + tail. Para conferir o monitor de contexto, baixe o limiar (`"contextThreshold": 100`) e veja o aviso `[TOKEN_WARNING]` entrar no system prompt da próxima chamada.
 
+#### Logs esperados (não é bug)
+
+O log do servidor mostra `msg="loading plugin"` **quatro vezes** no boot, sempre em dois pares: o plugin global é resolvido em duas localizações (global e projeto) e re-resolvido no `config.updated` que mescla o config do projeto. O `PluginSupervisor` deduplica por `id` e cacheia o módulo por `revision`, então o `setup` roda **uma vez** e cada hook dispara **uma vez** por evento — verificado com plugin-sonda: 1 `SETUP`, 1 `tool.execute.after` por chamada e 1 `[TOKEN_WARNING]` por request. Custo das linhas extras: poucos ms, zero token.
+
+Ao salvar `index.ts` ou `trim.ts`, o watcher descarta a instância anterior antes de criar a nova, ou seja, hot reload sem restart e sem acúmulo de handlers.
+
 ### 6. Desinstalar
 
 ```bash
