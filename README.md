@@ -42,7 +42,8 @@ Reinicie a sessão do agente — a skill carrega sozinha. Prefere delegar? Cole 
 6. [Matriz Numérica de Economia por Camada](#3-exemplo-numérico-em-sessão-típica-15-turnos)
 7. [Estrutura Detalhada dos Arquivos](#estrutura-detalhada-dos-arquivos)
 8. [Guia de Instalação e Integração](#guia-de-instalação-e-integração)
-9. [Licença & Contribuição](#licença--contribuição)
+9. [TODO & Roadmap](#todo--roadmap)
+10. [Licença & Contribuição](#licença--contribuição)
 
 ---
 
@@ -343,6 +344,14 @@ curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/
 ```
 
 No OpenCode, remova também as entradas `instructions`/`plugins` do `~/.config/opencode/opencode.json` (o script remove a skill e o plugin, mas não edita esse arquivo).
+
+---
+
+## TODO & Roadmap
+
+- [ ] **Benchmark A/B controlado da economia** — hoje os **-58,5%** da seção [Modelagem Matemática](#modelagem-matemática--roi-de-ativação) são **projeção** a partir das figuras por camada de CoACT/TRC, não medição própria. Falta medir: mesmo modelo, mesmas tarefas (fixas e versionadas no repo), com e sem skill + plugin, reportando (a) tokens de entrada/saída, (b) taxa de acerto (pass@1) e (c) **custo de retry** — quantas vezes o agente reexecuta um comando cujo output foi trimado. Publicar o harness e os resultados junto.
+- [ ] **Instrumentar retry no plugin** — contar reexecuções após trim, para detectar compressão excessiva em vez de assumir que não acontece.
+- [ ] **Versão em inglês** — `SKILL.md`, `AGENTS.md`, subskills, `install.sh`, README, GIFs e descrição do repo (EN como default, PT como espelho).
 
 ---
 
