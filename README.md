@@ -353,7 +353,6 @@ In OpenCode, also remove the `instructions`/`plugins` entries from `~/.config/op
 
 - [ ] **Controlled A/B benchmark of the savings** — the **-58.5%** in [Mathematical Modeling](#mathematical-modeling--activation-roi) is a **projection** from the per-layer CoACT/TRC figures, not our own measurement. Still to measure: same model, same tasks (fixed and versioned in the repo), with and without skill + plugin, reporting (a) input/output tokens, (b) success rate (pass@1) and (c) **retry cost** — how many times the agent re-runs a command whose output was trimmed. Publish the harness and results together.
 - [ ] **Instrument retries in the plugin** — count re-runs after a trim, to detect over-compression instead of assuming it does not happen.
-- [ ] **English everywhere** — `SKILL.md`, `AGENTS.md` and the subskills still ship in Portuguese (README, install messages, GIFs, charts and banner are already English), plus the GitHub repo description.
 
 ---
 

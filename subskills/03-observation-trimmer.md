@@ -1,15 +1,15 @@
 # Sub-Skill 03: Observation Trimming & Tool-Result Clearing (CoACT + TRC)
 
-## 1. Preservação da Próxima Ação (CoACT - Next-Action Preservation)
-Ao receber retornos de ferramentas (logs de terminal, respostas de API, consultas a banco de dados):
-- Truncar saídas mantendo **apenas** os elementos essenciais para a próxima decisão:
-  - Mensagens e stack traces de erro.
-  - Caminhos de arquivo modificados/lidos.
-  - IDs de recursos, tokens de acesso ou parâmetros de API.
-  - Números de linhas relevantes.
-- Elimine barras de progresso, logs de sucesso repetitivos e saídas limpas de compilação.
+## 1. Next-Action Preservation (CoACT)
+When receiving tool returns (terminal logs, API responses, database queries):
+- Truncate outputs keeping **only** the elements essential to the next decision:
+  - Error messages and stack traces.
+  - Modified/read file paths.
+  - Resource IDs, access tokens or API parameters.
+  - Relevant line numbers.
+- Remove progress bars, repetitive success logs and clean build output.
 
-## 2. Limpeza de Saídas Antigas (Tool-Result Clearing - TRC)
-- Mantenha na íntegra apenas as 2-3 observações de ferramentas mais recentes.
-- Substitua saídas de ferramentas mais antigas no histórico por placeholders no formato `[tool output cleared: exit 0]` ou `[output cleared: 142 lines]`.
-- Isso preserva o alinhamento de *KV-Cache* e reduz o custo acumulado de tokens em até 43% sem degradar a taxa de sucesso.
+## 2. Clearing Old Outputs (Tool-Result Clearing - TRC)
+- Keep the 2-3 most recent tool observations intact.
+- Replace older tool outputs in the history with placeholders in the format `[tool output cleared: exit 0]` or `[output cleared: 142 lines]`.
+- This preserves *KV-Cache* alignment and cuts accumulated token cost by up to 43% without degrading the success rate.

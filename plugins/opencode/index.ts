@@ -69,9 +69,9 @@ export default Plugin.define({
       event.system.push({
         type: "text",
         text:
-          `[TOKEN_WARNING] Histórico da sessão estimado em ~${tokens} tokens (limite: ${contextThreshold}). ` +
-          "AÇÃO RECOMENDADA: resuma o estado na estrutura <HISTORY_SUMMARY> (REASONING, VARS, TODO, COMPLETED, GUARDRAILS) " +
-          "— subskills/04-state-compactor.md — e substitua resultados antigos de ferramentas por placeholders [output cleared].",
+          `[TOKEN_WARNING] Session history estimated at ~${tokens} tokens (limit: ${contextThreshold}). ` +
+          "RECOMMENDED ACTION: summarize the state in a <HISTORY_SUMMARY> block (REASONING, VARS, TODO, COMPLETED, GUARDRAILS) " +
+          "— subskills/04-state-compactor.md — and replace older tool results with [output cleared] placeholders.",
       })
     })
 

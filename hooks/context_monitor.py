@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Hook Local (Zero Tokens LLM) - Context Monitor
-Estima o tamanho do histórico da sessão a partir do transcript JSONL e,
-acima do limite, injeta um aviso para acionar a Sub-Skill 04 (state-compactor).
+Local hook (zero LLM tokens) - Context Monitor
+Estimates the session history size from the JSONL transcript and, above the
+limit, injects a warning that triggers Sub-Skill 04 (state-compactor).
 
-Protocolo Command Code: payload JSON no stdin, resposta JSON no stdout.
-Silencioso (exit 0, stdout vazio) quando abaixo do limite.
+Command Code protocol: JSON payload on stdin, JSON response on stdout.
+Silent (exit 0, empty stdout) when below the limit.
 """
 
 import json
@@ -40,14 +40,14 @@ def main():
 
     print(json.dumps({
         "suppressOutput": True,
-        "systemMessage": f"[omni-token-optimizer] Histórico estimado em ~{tokens} tokens (limite: {TOKEN_THRESHOLD}).",
+        "systemMessage": f"[omni-token-optimizer] Estimated history of ~{tokens} tokens (limit: {TOKEN_THRESHOLD}).",
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "additionalContext": (
-                f"[TOKEN_WARNING] Histórico da sessão estimado em ~{tokens} tokens (limite: {TOKEN_THRESHOLD}). "
-                "AÇÃO RECOMENDADA: resuma o estado na estrutura <HISTORY_SUMMARY> "
+                f"[TOKEN_WARNING] Session history estimated at ~{tokens} tokens (limit: {TOKEN_THRESHOLD}). "
+                "RECOMMENDED ACTION: summarize the state in a <HISTORY_SUMMARY> block "
                 "(REASONING, VARS, TODO, COMPLETED, GUARDRAILS) — subskills/04-state-compactor.md — "
-                "e substitua resultados antigos de ferramentas por placeholders [output cleared]."
+                "and replace older tool results with [output cleared] placeholders."
             ),
         },
     }, ensure_ascii=False))

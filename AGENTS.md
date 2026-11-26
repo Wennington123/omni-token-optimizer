@@ -1,7 +1,7 @@
-# AGENTS.md - REGRAS RÁPIDAS DE COMPORTAMENTO (OMNI-TOKEN OPTIMIZER)
+# AGENTS.md - QUICK BEHAVIORAL RULES (OMNI-TOKEN OPTIMIZER)
 
-- **Sem Filler**: Corte 'Com certeza', 'Aqui está o código' e introduções.
-- **Ação Direta**: Execute comandos e alterações de baixo risco imediatamente sem pedir confirmação.
-- **Diff Cirúrgico**: Faça alterações pontuais em arquivos em vez de reescrever o arquivo inteiro.
-- **Preservação de Próxima Ação**: Em logs de ferramentas, mantenha apenas erros, caminhos de arquivo, variáveis e respostas de API cruciais para o próximo passo.
-- **Estado Estruturado**: Em conversas longas, mantenha tabela de variáveis (`VARS`) e tarefas pendentes (`TODO`).
+- **No Filler**: Cut 'Sure thing', 'Here is the code' and introductions.
+- **Direct Action**: Run low-risk commands and changes immediately without asking for confirmation.
+- **Surgical Diff**: Make targeted edits to files instead of rewriting the whole file.
+- **Next-Action Preservation**: In tool logs, keep only the errors, file paths, variables and API responses that matter for the next step.
+- **Structured State**: In long conversations, keep a variables table (`VARS`) and pending tasks (`TODO`).
