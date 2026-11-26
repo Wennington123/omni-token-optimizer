@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# omni-token-optimizer — instalador de uma linha
+# omni-token-optimizer — one-line installer
 #
 #   curl -fsSL https://raw.githubusercontent.com/Wennington123/omni-token-optimizer/main/install.sh | bash
 #
-# Opções:
-#   --dir DIR     raiz de skills do agente (padrão: auto-detecta)
-#   --uninstall   remove a skill instalada
-#   -h, --help    mostra esta ajuda
+# Options:
+#   --dir DIR     agent skills root (default: auto-detect)
+#   --uninstall   remove the installed skill
+#   -h, --help    show this help
 #
-# Auto-detecção da raiz de skills: ~/.commandcode/skills, ~/.claude/skills,
-# ~/.config/opencode/skills; se nenhuma existir, usa ~/.claude/skills.
+# Skills root auto-detection: ~/.commandcode/skills, ~/.claude/skills,
+# ~/.config/opencode/skills; if none exists, falls back to ~/.claude/skills.
 set -euo pipefail
 
 REPO_URL="https://github.com/Wennington123/omni-token-optimizer"
@@ -22,8 +22,8 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --dir) TARGET_DIR="$2"; shift 2 ;;
     --uninstall) UNINSTALL=1; shift ;;
-    -h|--help) grep '^#' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
-    *) echo "omni-token-optimizer: argumento desconhecido: $1" >&2; exit 1 ;;
+    -h|--help) grep '^#' "$0" | grep -v '^#!' | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "omni-token-optimizer: unknown argument: $1" >&2; exit 1 ;;
   esac
 done
 
@@ -47,20 +47,20 @@ if [[ "$UNINSTALL" -eq 1 ]]; then
   fi
   if [[ -d "$OPENCODE_DIR/plugins/$SKILL_NAME" ]]; then
     rm -rf "$OPENCODE_DIR/plugins/$SKILL_NAME"
-    echo "Removido: $OPENCODE_DIR/plugins/$SKILL_NAME"
+    echo "Removed: $OPENCODE_DIR/plugins/$SKILL_NAME"
   fi
   if [[ -d "$OPENCODE_DIR/skills/$SKILL_NAME" ]]; then
     rm -rf "$OPENCODE_DIR/skills/$SKILL_NAME"
-    echo "Removido: $OPENCODE_DIR/skills/$SKILL_NAME"
+    echo "Removed: $OPENCODE_DIR/skills/$SKILL_NAME"
   fi
-  echo "Removido: $SKILL_DIR (e hooks de $CC_HOOKS, se havia)"
+  echo "Removed: $SKILL_DIR (and hooks from $CC_HOOKS, if present)"
   exit 0
 fi
 
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "==> Baixando $REPO_URL"
+echo "==> Downloading $REPO_URL"
 if command -v git >/dev/null 2>&1 && git clone --quiet --depth 1 "$REPO_URL.git" "$TMP/repo" 2>/dev/null; then
   :
 else
@@ -68,9 +68,9 @@ else
   mv "$TMP/$SKILL_NAME-main" "$TMP/repo"
 fi
 
-[[ -f "$TMP/repo/SKILL.md" ]] || { echo "erro: SKILL.md não encontrado no download" >&2; exit 1; }
+[[ -f "$TMP/repo/SKILL.md" ]] || { echo "error: SKILL.md not found in the download" >&2; exit 1; }
 
-echo "==> Instalando em $SKILL_DIR"
+echo "==> Installing into $SKILL_DIR"
 mkdir -p "$SKILL_DIR"
 cp "$TMP/repo/SKILL.md" "$TMP/repo/AGENTS.md" "$SKILL_DIR/"
 cp -r "$TMP/repo/subskills" "$TMP/repo/hooks" "$SKILL_DIR/"
@@ -79,32 +79,32 @@ chmod +x "$SKILL_DIR/hooks/"*.py
 if [[ -d "$CC_HOOKS" ]]; then
   cp -f "$SKILL_DIR/hooks/"*.py "$CC_HOOKS/"
   chmod +x "$CC_HOOKS/"*.py
-  echo "==> Hooks copiados para $CC_HOOKS"
+  echo "==> Hooks copied to $CC_HOOKS"
 fi
 
 if [[ -d "$OPENCODE_DIR" ]]; then
   mkdir -p "$OPENCODE_DIR/plugins"
   rm -rf "$OPENCODE_DIR/plugins/$SKILL_NAME"
   cp -r "$TMP/repo/plugins/opencode" "$OPENCODE_DIR/plugins/$SKILL_NAME"
-  echo "==> Plugin OpenCode instalado em $OPENCODE_DIR/plugins/$SKILL_NAME"
+  echo "==> OpenCode plugin installed at $OPENCODE_DIR/plugins/$SKILL_NAME"
 
-  # Em máquinas com mais de um agente, a skill foi para outro root (ex.:
-  # ~/.commandcode/skills); o OpenCode só a enxerga em ~/.config/opencode/skills.
+    # On machines with more than one agent, the skill may have landed in another
+  # root (e.g. ~/.commandcode/skills); OpenCode only sees ~/.config/opencode/skills.
   OPENCODE_SKILL_DIR="$OPENCODE_DIR/skills/$SKILL_NAME"
   if [[ "$SKILL_DIR" != "$OPENCODE_SKILL_DIR" ]]; then
     mkdir -p "$OPENCODE_SKILL_DIR"
     cp -r "$SKILL_DIR/." "$OPENCODE_SKILL_DIR/"
-    echo "==> Skill OpenCode instalada em $OPENCODE_SKILL_DIR"
+    echo "==> OpenCode skill installed at $OPENCODE_SKILL_DIR"
   fi
 fi
 
-echo "==> Arquivos instalados:"
+echo "==> Installed files:"
 find "$SKILL_DIR" -type f | sed "s|^$SKILL_DIR/|    |"
 
 cat <<'WIRE'
 
-==> Para ativar o context monitor no Command Code / Claude Code, adicione ao
-    settings.json (config testada; ajuste o limiar via OMNI_TOKEN_THRESHOLD):
+==> To enable the context monitor in Command Code / Claude Code, add this to
+    settings.json (tested config; tune the threshold via OMNI_TOKEN_THRESHOLD):
 
   "hooks": {
     "PreToolUse": [{
@@ -117,17 +117,17 @@ cat <<'WIRE'
     }]
   }
 
-    O monitor lê o transcript da sessão (protocolo JSON de hooks) e injeta o
-    aviso de compactação da subskill 04 quando o histórico passa do limite.
-    observation_trimmer.py fica para agentes Python customizados — hooks de
-    Command Code não substituem o output que o modelo vê (só injetam contexto).
-    A skill em si é auto-descoberta pelo agente na próxima sessão.
+    The monitor reads the session transcript (hooks JSON protocol) and injects
+    the subskill 04 compaction warning once the history crosses the limit.
+    observation_trimmer.py is meant for custom Python agents — Command Code
+    hooks cannot replace the output the model sees (they only inject context).
+    The skill itself is auto-discovered by the agent on the next session.
 WIRE
 
 if [[ -d "$OPENCODE_DIR" ]]; then
   cat <<WIRE2
 
-==> OpenCode (v2): adicione ao $OPENCODE_DIR/opencode.json —
+==> OpenCode (v2): add this to $OPENCODE_DIR/opencode.json —
 
   {
     "\$schema": "https://opencode.ai/config.json",
@@ -135,8 +135,8 @@ if [[ -d "$OPENCODE_DIR" ]]; then
     "plugins": ["$OPENCODE_DIR/plugins/$SKILL_NAME"]
   }
 
-  Skill e plugin são recarregados ao salvar (sem restart). Opções de limiar
-  e trim: veja a seção "Integração OpenCode" no README.
+  Skill and plugin reload on save (no restart). Threshold and trim options:
+  see the "OpenCode Integration" section in the README.
 WIRE2
 fi
-echo "==> Pronto. Reinicie a sessão do agente para carregar a skill."
+echo "==> Done. Restart the agent session to load the skill."

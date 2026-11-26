@@ -14,7 +14,7 @@
     <path d="M224 44 L209 69" stroke="#e6edf3" stroke-width="6" stroke-linecap="round"/>
 </g>
   <text x="440" y="290" font-family="DejaVu Sans Mono, monospace" font-size="60" font-weight="bold"><tspan fill="#e6edf3">omni-token</tspan><tspan dx="16" fill="#3fb950">optimizer</tspan></text>
-  <text x="444" y="352" font-family="DejaVu Sans, sans-serif" font-size="24" fill="#8b949e">Hooks de custo 0 + skills que comprimem contexto.</text>
+  <text x="444" y="352" font-family="DejaVu Sans, sans-serif" font-size="24" fill="#8b949e">Zero-cost hooks + skills that compress context.</text>
   <text x="444" y="398" font-family="DejaVu Sans, sans-serif" font-size="20" fill="#6e7681">Caveman · Punisher · Ponytail</text>
   <text x="444" y="428" font-family="DejaVu Sans, sans-serif" font-size="20" fill="#6e7681">CoACT · TRC · ACON · TRACE · LLMLingua</text>
 </svg>
